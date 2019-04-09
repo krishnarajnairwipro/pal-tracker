@@ -3,6 +3,6 @@ applications:
 - name: pal-tracker
   path: src/PalTracker/bin/Release/netcoreapp2.2/publish/
   routes:
-  - route: pal-tracker-krdhrub-production.apps.evans.pal.pivotal.io
+  - route: pal-tracker-krdhrub.apps.evans.pal.pivotal.io
   env:
-    WELCOME_MESSAGE: Hello from Cloud Foundry
+    WELCOME_MESSAGE: Hello from Cloud Foundry Prod
