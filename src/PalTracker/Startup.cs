@@ -10,6 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Steeltoe.Management.CloudFoundry;
+using Steeltoe.Management.Endpoint.CloudFoundry;
+using Steeltoe.Common.HealthChecks;
+using Steeltoe.Management.Endpoint.Info;
 
 namespace PalTracker
 {
@@ -29,6 +33,10 @@ namespace PalTracker
             services.AddSingleton(sp => new WelcomeMessage(
                Configuration.GetValue<string>("WELCOME_MESSAGE", "WELCOME_MESSAGE not configured.")
            ));
+            services.AddCloudFoundryActuators(Configuration);
+             services.AddScoped<IHealthContributor, TimeEntryHealthContributor>();
+             services.AddSingleton<IOperationCounter<TimeEntry>, OperationCounter<TimeEntry>>();
+             services.AddSingleton<IInfoContributor, TimeEntryInfoContributor>();
             services.AddSingleton(sp => new CloudFoundryInfo(
 // "123","512M","1","127.0.0.1"
 Configuration.GetValue<string>("PORT", "PORT not configured."),
@@ -56,6 +64,7 @@ services.AddSingleton<ITimeEntryRepository, InMemoryTimeEntryRepository>();
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseCloudFoundryActuators();
         }
     }
 }
